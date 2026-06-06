@@ -17,6 +17,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   preprocess:
     name: Run Preprocessing Script
@@ -30,17 +33,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          cache: 'pip'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pandas numpy scikit-learn
 
-      # Menjalankan script menggunakan file mentah yang sudah ada di repo
       - name: Run preprocessing pipeline
         run: |
-          python preprocessing/automate_Rajif-Raditya.py \
+          python preprocessing/automate_Rajif-Athallah.py \
             --input  diabetes_prediction_dataset.csv \
             --output preprocessing/diabetes_prediction_preprocessing.csv
 
@@ -50,7 +51,7 @@ jobs:
             echo "❌ ERROR: Output file tidak ditemukan!"
             exit 1
           fi
-          echo "✅ Output terverifikasi berhasil dibuat!"
+          echo "✅ Output terverifikasi sukses dibuat!"
 
       - name: Upload preprocessed dataset as artifact
         uses: actions/upload-artifact@v4
