@@ -41,7 +41,7 @@ jobs:
 
       - name: Run preprocessing pipeline
         run: |
-          python preprocessing/automate_Rajif-Athallah.py \
+          python preprocessing/automate_Rajif-Raditya.py \
             --input  diabetes_prediction_dataset.csv \
             --output preprocessing/diabetes_prediction_preprocessing.csv
 
