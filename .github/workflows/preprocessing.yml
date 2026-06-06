@@ -1,0 +1,60 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# .github/workflows/preprocessing.yml
+#
+# GitHub Actions CI/CD — Diabetes Prediction Preprocessing Pipeline
+# Dicoding Submission: Membangun Sistem Machine Learning (Tier Advance)
+#
+# Trigger  : Push ke branch 'main'
+# Tugas    : Menjalankan automate_Rajif-Athallah.py dan menyimpan artifact
+#            diabetes_prediction_preprocessing.csv
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: Preprocessing Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  preprocess:
+    name: Run Preprocessing Script
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas numpy scikit-learn
+
+      # Menjalankan script menggunakan file mentah yang sudah ada di repo
+      - name: Run preprocessing pipeline
+        run: |
+          python preprocessing/automate_Rajif-Athallah.py \
+            --input  diabetes_prediction_dataset.csv \
+            --output preprocessing/diabetes_prediction_preprocessing.csv
+
+      - name: Verify output file
+        run: |
+          if [ ! -f "preprocessing/diabetes_prediction_preprocessing.csv" ]; then
+            echo "❌ ERROR: Output file tidak ditemukan!"
+            exit 1
+          fi
+          echo "✅ Output terverifikasi berhasil dibuat!"
+
+      - name: Upload preprocessed dataset as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: diabetes_prediction_preprocessing
+          path: preprocessing/diabetes_prediction_preprocessing.csv
+          retention-days: 30
